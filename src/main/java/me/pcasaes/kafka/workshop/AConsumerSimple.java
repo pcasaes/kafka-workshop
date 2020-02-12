@@ -12,6 +12,10 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
+/**
+ * What we'll learn here:
+ *  How to set up a simple consumer in a consumer group (a subscription)
+ */
 public class AConsumerSimple {
 
     private static Logger LOGGER = LoggerFactory.getLogger(AConsumerSimple.class.getName());

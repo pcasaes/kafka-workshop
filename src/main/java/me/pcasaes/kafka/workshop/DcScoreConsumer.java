@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -19,6 +20,12 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+/**
+ * What we'll learn here:
+ * How to set up a non subscribing consumer that recovers it's state from a compaction log.
+ * <p>
+ * Run this consumer to see results of the scoreboard. You can stop and restart it and it will be consistent.
+ */
 public class DcScoreConsumer {
 
 
@@ -41,70 +48,71 @@ public class DcScoreConsumer {
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, "Scoreboard Viewer " + UUID.randomUUID());
 
 
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
+        try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties)) {
 
         /*
         We will be maintaining the score board in memory so we won't be setting up a subscriber.
          */
-        Collection<TopicPartition> topicPartitions = consumer.partitionsFor(topic)
-                .stream()
-                .map(pInfo -> new TopicPartition(pInfo.topic(), pInfo.partition()))
-                .collect(Collectors.toList());
+            Collection<TopicPartition> topicPartitions = consumer.partitionsFor(topic)
+                    .stream()
+                    .map(pInfo -> new TopicPartition(pInfo.topic(), pInfo.partition()))
+                    .collect(Collectors.toList());
 
-        consumer.assign(topicPartitions);
+            consumer.assign(topicPartitions);
 
         /*
         This will move us to the beginning of the topic.
          */
-        consumer.seekToBeginning(topicPartitions);
+            consumer.seekToBeginning(topicPartitions);
 
-        AtomicBoolean running = new AtomicBoolean(true);
+            AtomicBoolean running = new AtomicBoolean(true);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            running.set(false);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                running.set(false);
 
-            //causes a blocking poll to throw a WakeupException
-            consumer.wakeup();
-            LOGGER.info("shutting down");
-        }));
+                //causes a blocking poll to throw a WakeupException
+                consumer.wakeup();
+                LOGGER.info("shutting down");
+            }));
 
 
-        Map<String, String> scoreboard = new TreeMap<>();
-        long start = System.currentTimeMillis();
-        boolean upToDate = false;
+            Map<String, String> scoreboard = new TreeMap<>();
+            long start = System.currentTimeMillis();
+            boolean upToDate = false;
 
-        long lastPrint = 0;
+            long lastPrint = 0;
 
-        // poll non stop. Must kill with sigterm
-        while (running.get()) {
-            try {
-                ConsumerRecords<String, String> records =
-                        consumer.poll(Duration.ofMillis(1000));
+            // poll non stop. Must kill with sigterm
+            while (running.get()) {
+                try {
+                    ConsumerRecords<String, String> records =
+                            consumer.poll(Duration.ofMillis(1000));
 
-                if (!upToDate && records.isEmpty()) {
-                    LOGGER.info("all caught up");
-                    upToDate = true;
-                }
-                for (ConsumerRecord<String, String> record : records) {
-                    if (record.value() == null) {
-                        scoreboard.remove(record.key());
-                    } else {
-                        scoreboard.put(record.key(), record.value());
-                    }
-                    if (!upToDate && record.timestamp() <= start) {
+                    if (!upToDate && records.isEmpty()) {
                         LOGGER.info("all caught up");
                         upToDate = true;
                     }
-                }
+                    for (ConsumerRecord<String, String> record : records) {
+                        if (record.value() == null) {
+                            scoreboard.remove(record.key());
+                        } else {
+                            scoreboard.put(record.key(), record.value());
+                        }
+                        if (!upToDate && record.timestamp() <= start) {
+                            LOGGER.info("all caught up");
+                            upToDate = true;
+                        }
+                    }
 
-                // only print every 5 seconds if we are up to date
-                long now = System.currentTimeMillis();
-                if (upToDate && (now - lastPrint) >= 5_000L) {
-                    print(scoreboard);
-                    lastPrint = now;
+                    // only print every 5 seconds if we are up to date
+                    long now = System.currentTimeMillis();
+                    if (upToDate && (now - lastPrint) >= 3_000L) {
+                        print(scoreboard);
+                        lastPrint = now;
+                    }
+                } catch (WakeupException ex) {
+                    LOGGER.info("consumer wakeup");
                 }
-            } catch (WakeupException ex) {
-                LOGGER.info("consumer wakeup");
             }
         }
     }
@@ -114,6 +122,7 @@ public class DcScoreConsumer {
         for (int i = 0; i < 4; i++) {
             sb.append("\n");
         }
+        sb.append(new Date().toString()).append("\n");
         for (Map.Entry<String, String> entry : scoreboard.entrySet()) {
             sb.append(entry.getValue()).append("\t\t").append(entry.getKey()).append("\n");
         }

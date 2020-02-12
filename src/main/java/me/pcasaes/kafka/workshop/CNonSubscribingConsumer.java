@@ -14,6 +14,11 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+/**
+ * What we'll learn here:
+ *  How to set up a non subscribing consumer.
+ *
+ */
 public class CNonSubscribingConsumer {
 
 
@@ -50,6 +55,8 @@ public class CNonSubscribingConsumer {
 
         /*
         This will move us to the beginning of the topic. Otherwise we will be at latest.
+
+        Check out the other seek methods.
          */
         consumer.seekToBeginning(topicPartitions);
 

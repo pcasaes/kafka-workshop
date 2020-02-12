@@ -8,6 +8,11 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.Properties;
 
 /**
+ *
+ * What we'll learn here:
+ *  How to set up a producer with 0 guarantee's.
+ *  How consumer groups work with re-balancing.
+ *
  * Start up 4 instances of {@link BConsumerPart3}
  * Then start up an instance of this class (it'll stop eventually but you might have to kill it).
  *

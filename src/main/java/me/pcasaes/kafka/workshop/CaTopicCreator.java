@@ -19,6 +19,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
+ * What we'll learn here:
+ *  How to programmatically create a Topic.
+ *  How to configure a delete cleanup policy.
+ *
  * This will create a topic named java.created.topic
  * After doing so run from the CLI to check it out:
  *

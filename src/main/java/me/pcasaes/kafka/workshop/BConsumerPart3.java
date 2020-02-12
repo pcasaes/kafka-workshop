@@ -12,6 +12,9 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
+/**
+ * @see BProducerPart3
+ */
 public class BConsumerPart3 {
 
     private static Logger LOGGER = LoggerFactory.getLogger(BConsumerPart3.class.getName());

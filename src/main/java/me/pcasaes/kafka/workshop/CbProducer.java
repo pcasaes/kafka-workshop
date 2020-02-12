@@ -12,6 +12,12 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 /**
+ * What we'll learn here:
+ *  How to setup a producer with guaranteed delivery.
+ *  How Kafka guarantee's delivery.
+ *  How to block on send.
+ *  How to setup a callback on send.
+ *
  * Please start with {@link CaTopicCreator
  * <p>
  * Running this will add 1000 messages to java.created.topic

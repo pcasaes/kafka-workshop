@@ -18,6 +18,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * What we'll learn here:
+ *  How to set up a topic with compact cleanup policy.
+ *  What tombstone records are.
+ *
+ *
+ * Run this to create this topic. Then run {@link DbScoreProducer} followed by {@link DcScoreConsumer}
+ * Keep an eye on the consumer's log.
+ *
+ */
 public class DaCompactionLogTopicCreator {
 
 
