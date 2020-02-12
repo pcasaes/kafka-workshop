@@ -21,6 +21,8 @@ cli tools included in the folder `bin`. You'll need to add this entry into your 
     
 # Command Line Tools
 
+## Simple topic
+
 Topics can be managed with the `kafka-topics.sh` script:
     
     kafka-topics.sh --help
@@ -99,6 +101,33 @@ You can also start a consumer from a provided offset:
          --topic simple.topic \
          --partition 0 \
          --offset 3
+         
+Let's try a consumer with subscription. This is done by identifying your consumer as part of a group:
+    
+        kafka-console-consumer.sh \
+             --bootstrap-server localhost:9092 \
+             --topic simple.topic \
+             --consumer-property group.id=simple.consumer1 \
+             --from-beginning
+
+It should spit out the contents of the topic. Kill the consumer and add in more messages. After that rerun the
+previous consumer command. It should start from it left off, even with the `--from-beginning`.
+
+We can get information about the the consumer group with the following command:
+
+       kafka-consumer-groups.sh \
+            --bootstrap-server localhost:9092 \
+            --group simple.consumer1 \
+            --describe
+
+You can also delete the consume group:
+
+        kafka-consumer-groups.sh \
+                    --bootstrap-server localhost:9092 \
+                    --group simple.consumer1 \
+                    --delete 
+    
+## Multi partition Topics
     
 `ctrl-c` out of the consumers and producers and let's test out a topic with 3 partitions:
 
