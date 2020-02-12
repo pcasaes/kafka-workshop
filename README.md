@@ -266,6 +266,14 @@ Here are the relevant topic configs:
     segment.bytes
     segment.ms
     
+## Do not commit offset on every received message
+
+By default consumer groups are configured to use auto commit for offsets. This is how Kafka knows where the consumer 
+left off. This auto commit is done asynchronously and periodically. The period can be configured through 
+`auto.commit.interval.ms`. It's default is 5 seconds. Auto commit can be disabled by setting `enable.auto.commit` to
+`false`. A commit is a write on the topic `__consumer_offset`, if you commit after every single message you will spike
+the cluster's cpus. You should batch your commits. We did not look into not using auto commit in this workshop. I leave
+that as an exercise to you. 
     
 # Going Further
 

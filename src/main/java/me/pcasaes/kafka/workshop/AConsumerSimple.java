@@ -15,6 +15,10 @@ import java.util.Properties;
 /**
  * What we'll learn here:
  *  How to set up a simple consumer in a consumer group (a subscription)
+ *  How to configure Kafka classes:
+ *      {@link org.apache.kafka.clients.producer.ProducerConfig}
+ *      {@link org.apache.kafka.clients.consumer.ConsumerConfig}
+ *      {@link org.apache.kafka.common.config.TopicConfig}
  */
 public class AConsumerSimple {
 
@@ -27,6 +31,10 @@ public class AConsumerSimple {
         String topic = "simple.topic";
 
         // consumer configuration
+        /*
+        In Kafka all configuration values must be Strings.
+        All Kafka classes are configured using properties defined in ConsumerConfig, TopicConfig and ProducerConfig
+         */
         Properties properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
