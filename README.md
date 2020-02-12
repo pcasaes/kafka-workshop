@@ -34,9 +34,9 @@ Create a simple topic with 1 partition and a replication factor of 2:
         --partitions 1 \
         --replication-factor 2
     
--WOOP!- We are not allowed to create a replication factor greater than the number of brokers in our cluster.
+_WOOP!_ We are not allowed to create a replication factor greater than the number of brokers in our cluster.
 
-> **INFO** In Kafka nodes are called -brokers- or a -Kafka broker- while the cluster is called a -Kafka cluster-.
+> **INFO** In Kafka nodes are called _brokers_ or a _Kafka broker_ while the cluster is called a _Kafka cluster_.
 
 Try again with a RF of 1:
 
@@ -53,7 +53,7 @@ Should've created with the warning:
     
 You shouldn't mix `_` and `.` in your project. Standardize around one of those or avoid them completely.
 
-> _INFO_ all kafka cli commands that expect a broker endpoint can be supplied as a comma separated list.
+> **INFO** all kafka cli commands that expect a broker endpoint can be supplied as a comma separated list.
 
 Ok, let's produce some messages:
 
@@ -81,7 +81,7 @@ Open a second terminal and set up a consumer:
         --bootstrap-server localhost:9092 \
         --topic simple.topic
 
-This will block the terminal waiting for messages... -but what? where are our messages?!!!-
+This will block the terminal waiting for messages... _but what? where are our messages?!!!_
 `ctrl-c` out of the consumer and let's read from the beginning
 
     kafka-console-consumer.sh \
@@ -125,7 +125,7 @@ Start up a consumer reading from the beginning:
         --topic part3.topic \
         --from-beginning
 
--What happened to the order!!!?- Messages without keys (the ones we are generating) get sent to the
+_What happened to the order!!!?_ Messages without keys (the ones we are generating) get sent to the
 producers in a Round-Robin fashion. Order is only preserved within a partition. The consumer will batch
 receive the messages from one partition before moving onto the next.    
     
@@ -174,7 +174,7 @@ Let's read from the partitions individually:
 
 Try it out with partitions `1` and `2`.
 
--It would be nice to see the key in the console.- It sure would! Try this consumer out:
+_It would be nice to see the key in the console._ It sure would! Try this consumer out:
 
      kafka-console-consumer.sh \
          --bootstrap-server localhost:9092 \
@@ -240,4 +240,4 @@ Here are the relevant topic configs:
     
 # Going Further
 
-Checkout the -Apache Kafka Series- by Stephane Maarek on Udemy. He has lots of courses on Kafka.
+Checkout the _Apache Kafka Series_ by Stephane Maarek on Udemy. He has lots of courses on Kafka.
