@@ -98,7 +98,7 @@ public class DcScoreConsumer {
                         } else {
                             scoreboard.put(record.key(), record.value());
                         }
-                        if (!upToDate && record.timestamp() <= start) {
+                        if (!upToDate && record.timestamp() >= start) {
                             LOGGER.info("all caught up");
                             upToDate = true;
                         }

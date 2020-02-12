@@ -73,7 +73,7 @@ public class CbProducer {
             Blocking will reduce throughput since kafka sends in batches.
 
              */
-            if (i % 127 == 0) {
+            if ((i & 127) == 0) {
                 try {
                     RecordMetadata metadata = producer.send(record).get();
                     LOGGER.info("\n\nMessage sync sent, partition:\t" + metadata.partition() + ", offset:\t" + metadata.offset() + "\n\n");

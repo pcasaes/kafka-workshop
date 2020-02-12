@@ -46,7 +46,7 @@ public class BProducerPart3 {
             producer.send(record); //send data asynchronously
 
             // sleep for 1 second every 64 messages
-            if (i % 63 == 0) {
+            if ((i & 63) == 0) {
                 try {
                     Thread.sleep(1_000L);
                 } catch (InterruptedException e) {

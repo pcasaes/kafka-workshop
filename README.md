@@ -165,7 +165,7 @@ Let's try some keys. `ctrl-c` out from the producer and consumer and delete the 
         --topic part3.topic \
         --delete
         
-Recreate the topic and setup a new producer:
+**RECREATE THE SAME TOPIC** and setup a new producer:
 
     kafka-console-producer.sh  \
         --broker-list localhost:9092 \
@@ -219,7 +219,7 @@ add the following to your `/etc/hosts` file:
 
     127.0.0.1 workshop-kafka
     
-At any moment the kafka docker can be reset with this command
+At any moment the kafka docker can be reset with this command (but don't do this now!)
 
     docker-compose rm -svf
     
