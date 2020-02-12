@@ -89,7 +89,7 @@ This will block the terminal waiting for messages... _but what? where are our me
         --topic simple.topic \
         --from-beginning
 
-Your message should appear now. Notice that the messages are in order (one partition give us global order)
+Your message should appear now. Notice that the messages are in order (one partition gives us global order)
 You can type in more messages into the producer and they should appear in the consumer in real time.
 
 You can also start a consumer from a provided offset:
@@ -218,13 +218,13 @@ always start from the beginning handle the consumer yourself with `assign` and `
     
 ## Be mindful of setting up a cleanup policy
 
-By default topics will retain all messages. Make sure this is what you want. Other wise setup
+By default topics will retain all messages. Make sure this is what you want. Otherwise setup
 `delete` or `compact` (or both comma separated) in the topic config `cleanup.policy`.
 
 ## Configure segment size properly
 
-Kafka saves all records into segments. By default a segment is closed once a it reaches 1 week in age or
-1GB, whichever comes first. This might trouble your cleanup configuration. If you're using the `delete`
+Kafka saves all records into segments. By default a segment is closed once it reaches 1 week in age or
+1GB in size, whichever comes first. This might trouble your cleanup configuration. If you're using the `delete`
 cleanup policy a single unexpired records will keep an entire segment from being deleted. This policy acts
 on entire segments and not individual records.
 
